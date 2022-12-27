@@ -41,7 +41,12 @@ class OrderFragment : Fragment() {
                 text += if (parmesan.isChecked) ", extra parmesan" else ""
                 val chiliOil = view.findViewById<Chip>(R.id.chip_chili_oil)
                 text += if (chiliOil.isChecked) ", extra Chili oil" else ""
-                Snackbar.make(fab, text, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(fab, text, Snackbar.LENGTH_LONG)
+                    .setAction("Undo") {
+                        Toast.makeText(activity, "Undone", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    .show()
             }
         }
 
