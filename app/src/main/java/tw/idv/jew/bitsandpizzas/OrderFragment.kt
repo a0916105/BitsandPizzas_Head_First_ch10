@@ -12,23 +12,24 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import tw.idv.jew.bitsandpizzas.databinding.FragmentOrderBinding
 
 class OrderFragment : Fragment() {
+    private var _binding: FragmentOrderBinding? = null
+    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_order, container, false)
+        _binding = FragmentOrderBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
-        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
-            val pizzaGroup = view.findViewById<RadioGroup>(R.id.pizza_group)
-            val pizzaType = pizzaGroup.checkedRadioButtonId
+        binding.fab.setOnClickListener {
+            val pizzaType = binding.pizzaGroup.checkedRadioButtonId
             if (pizzaType == -1) {
                 val text = "You need to choose a pizza type"
                 Toast.makeText(activity, text, Toast.LENGTH_LONG).show()
@@ -37,11 +38,9 @@ class OrderFragment : Fragment() {
                     R.id.radio_diavolo -> "Diavolo pizza"
                     else -> "Funghi pizza"
                 })
-                val parmesan = view.findViewById<Chip>(R.id.chip_parmesan)
-                text += if (parmesan.isChecked) ", extra parmesan" else ""
-                val chiliOil = view.findViewById<Chip>(R.id.chip_chili_oil)
-                text += if (chiliOil.isChecked) ", extra Chili oil" else ""
-                Snackbar.make(fab, text, Snackbar.LENGTH_LONG)
+                text += if (binding.chipParmesan.isChecked) ", extra parmesan" else ""
+                text += if (binding.chipChiliOil.isChecked) ", extra Chili oil" else ""
+                Snackbar.make(binding.fab, text, Snackbar.LENGTH_LONG)
                     .setAction("Undo") {
                         Toast.makeText(activity, "Undone", Toast.LENGTH_SHORT)
                             .show()
@@ -51,5 +50,11 @@ class OrderFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }
